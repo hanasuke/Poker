@@ -1,0 +1,9 @@
+tmp
+._*
+.DS_Store
+.settings
+Thumbs.db
+# editors
+*~
+\#*\#
+*.swp
