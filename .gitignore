@@ -7,6 +7,9 @@ Thumbs.db
 *.ini
 *.out
 
+usr/*
+log/*
+
 # editors
 *~
 \#*\#
