@@ -47,7 +47,7 @@ bool check_straight(int *num);
 bool check_flush(int *suite);
 bool check_3cards(int num[]);
 bool check_pair(int hd[], int *num); // ペアの存在
-
+int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[]);
 //====================================================================
 //  戦略
 //====================================================================
@@ -90,7 +90,10 @@ int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int
   if ( check_pair(myhd, hdnum) ) {
     return -1;
   }
-  //if ( tk < 2 ) { return -1; }
+
+  //return burn_index(hd, fd, cg, tk, ud, us, hdnum, hdsuite);
+
+  if ( tk < 2 ) { return -1; }
   if ( poker_point(myhd) > P2 ) { return -1; }
   return 0;
 }
@@ -193,4 +196,18 @@ bool check_pair(int hd[], int *num) {
       return false;
     }
   }
+}
+
+//--------------------------------------------------------------------
+// 捨て札決定
+// 引数: strategy()の引数+数位配列、図種配列
+// 返却: 捨て札のインデックス(0-4)
+//--------------------------------------------------------------------
+
+int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[]) {
+  if ( tk < 2 ) {
+    return -1;
+  } else {
+  }
+  return 0;
 }
