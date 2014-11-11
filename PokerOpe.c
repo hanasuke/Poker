@@ -43,6 +43,7 @@
 //--------------------------------------------------------------------
 
 void check_myhd(int hd[], int *num, int *suite);
+bool check_3cards(int num[]);
 bool check_pair(int hd[], int *num); // ペアの存在
 
 //====================================================================
@@ -71,14 +72,17 @@ int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int
   int hdsuite[4] = {0}; // マーク
   arr_copy(myhd, hd, HNUM);
   check_myhd(myhd, hdnum, hdsuite);
+
+  if ( check_3cards(hdnum) ) {
+    return -1;
+  }
+
   if ( check_pair(myhd, hdnum) ) {
     return -1;
-  } else {
-    return 1;
   }
   //if ( tk < 2 ) { return -1; }
-  //if ( poker_point(myhd) > P2 ) { return -1; }
-  //return 0;
+  if ( poker_point(myhd) > P2 ) { return -1; }
+  return 0;
 }
 
 
@@ -87,9 +91,9 @@ int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int
 //====================================================================
 
 //--------------------------------------------------------------------
-// ペア存在チェック
-// 引数: 手札
-// 返却: 真偽値
+// 数位・図種別に数値を格納
+// 引数: 手札、数位配列、図種配列
+// 返却: なし
 //--------------------------------------------------------------------
 
 void check_myhd(int hd[], int *num, int *suite) {
@@ -106,6 +110,23 @@ void check_myhd(int hd[], int *num, int *suite) {
 }
 
 //--------------------------------------------------------------------
+// 3カード判定
+// 引数: 手札、数位配列、図種配列
+// 返却: なし
+//--------------------------------------------------------------------
+
+bool check_3cards(int num[]) {
+  int k;
+
+  for ( k = 0; k < 4; k++ ) {
+    if ( num[k] >= 3 ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+//--------------------------------------------------------------------
 // ペア存在チェック
 // 引数: 手札
 // 返却: 真偽値
@@ -115,7 +136,7 @@ bool check_pair(int hd[], int *num) {
   int k;
 
   for ( k = 0 ; k < 13; k++ ) {
-    if ( hd[k] > 1 ) {
+    if ( num[k] > 1 ) {
       return true;
     } else {
       return false;
