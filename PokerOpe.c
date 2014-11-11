@@ -64,11 +64,11 @@ us : 捨札数
 --------------------------------------------------------------------*/
 
 int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int us) {
-  int the;
-  card_show(hd, HNUM);
-  printf(" ?  "); scanf("%d", &the);
-  if ( the < 0 || the > 4 ) { the = -1; }
-  return the;
+  int myhd[HNUM];
+  arr_copy(myhd, hd, HNUM);
+  if ( tk < 2 ) { return -1; }
+  if ( poker_point(myhd) > P2 ) { return -1; }
+  return 0;
 }
 
 
