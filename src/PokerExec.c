@@ -515,13 +515,13 @@ void make_dir(void)
   DIR *log_dir;                   // ログディレクトリ
 
   //----  ログディレクトリへのパス
-  strcpy(Dir, "..\\..\\log\\");
+  strcpy(Dir, "../../log/");
   strcat(Dir, Name);
 
   //----  ログディレクトリの有無
   if ( (log_dir = opendir(Dir)) == NULL ) {
     //----  ログディレクトリの作成(mdコマンドの呼出)
-    strcpy(command, "md ");
+    strcpy(command, "mkdir");
     strcat(command, Dir);
     system(command);
   }
@@ -540,15 +540,15 @@ void make_log(void)
 
   //---- Game.logへのパスを作成
   strcpy(path1, Dir);
-  strcat(path1, "\\Game.log");
+  strcat(path1, "/Game.log");
 
   //---- Result.txtへのパスを作成
   strcpy(path2, Dir);
-  strcat(path2, "\\Result.txt");
+  strcat(path2, "/Result.txt");
 
   //---- Stock.iniへのパスを作成
   strcpy(path3, Dir);
-  strcat(path3, "\\Stock.ini");
+  strcat(path3, "/Stock.ini");
 
   //---- Game.logのオープン
   if( (Game_Log = fopen(path1, "w")) == NULL ) {
@@ -563,7 +563,7 @@ void make_log(void)
   }
 
   //---- Stock.iniのコピー(copyコマンドの呼出)
-  strcpy(command, "copy ");
+  strcpy(command, "cp ");
   strcat(command, Stck);
   strcat(command, " ");
   strcat(command, path3);
