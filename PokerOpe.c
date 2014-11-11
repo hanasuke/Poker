@@ -43,6 +43,7 @@
 //--------------------------------------------------------------------
 
 void check_myhd(int hd[], int *num, int *suite);
+bool check_flush(int *suite);
 bool check_3cards(int num[]);
 bool check_pair(int hd[], int *num); // ペアの存在
 
@@ -72,6 +73,10 @@ int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int
   int hdsuite[4] = {0}; // マーク
   arr_copy(myhd, hd, HNUM);
   check_myhd(myhd, hdnum, hdsuite);
+
+  if ( check_3cards(hdsuite) ) {
+    return -1;
+  }
 
   if ( check_3cards(hdnum) ) {
     return -1;
@@ -107,6 +112,23 @@ void check_myhd(int hd[], int *num, int *suite) {
     num[num_index]++;
     suite[suite_index]++;
   }
+}
+
+//--------------------------------------------------------------------
+// フラッシュ判定
+// 引数: 図種配列
+// 返却: 真偽値
+//--------------------------------------------------------------------
+
+bool check_flush(int *suite) {
+  int k;
+
+  for ( k = 0; k < 4; k++ ) {
+    if ( suite[k] == 5 ) {
+      return true;
+    }
+  }
+  return false;
 }
 
 //--------------------------------------------------------------------
