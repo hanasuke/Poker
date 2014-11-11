@@ -43,6 +43,7 @@
 //--------------------------------------------------------------------
 
 void check_myhd(int hd[], int *num, int *suite);
+bool check_straight(int *num);
 bool check_flush(int *suite);
 bool check_3cards(int num[]);
 bool check_pair(int hd[], int *num); // ペアの存在
@@ -112,6 +113,30 @@ void check_myhd(int hd[], int *num, int *suite) {
     num[num_index]++;
     suite[suite_index]++;
   }
+}
+
+//--------------------------------------------------------------------
+// ストレート判定
+// 引数: 数位配列
+// 返却: 真偽値
+//--------------------------------------------------------------------
+
+bool check_straight(int *num) {
+  int k;
+  int length = 0;
+
+  for ( k = 0; k < 13; k++ ) {
+    if ( length == 5 ) {
+      return true;
+    }
+
+    if ( num[k] ) {
+      length++;
+    } else {
+      length = 0;
+    }
+  }
+  return false;
 }
 
 //--------------------------------------------------------------------
