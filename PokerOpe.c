@@ -91,7 +91,7 @@ int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int
     return -1;
   }
 
-  //return burn_index(hd, fd, cg, tk, ud, us, hdnum, hdsuite);
+  return burn_index(myhd, fd, cg, tk, ud, us, hdnum, hdsuite);
 
   if ( tk < 2 ) { return -1; }
   if ( poker_point(myhd) > P2 ) { return -1; }
@@ -203,11 +203,23 @@ bool check_pair(int hd[], int *num) {
 // 引数: strategy()の引数+数位配列、図種配列
 // 返却: 捨て札のインデックス(0-4)
 //--------------------------------------------------------------------
+// strategy()の引数
+// hd : 手札配列
+// fd : 場札配列
+// cg : チェンジ数
+// tk : テイク数
+// ud : 捨札配列
+// us : 捨札数
+//--------------------------------------------------------------------
 
 int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[]) {
-  if ( tk < 2 ) {
-    return -1;
+  if ( tk > 4 ) {
+    if ( poker_point(hd) > P4 ) { return -1; }
+  } else if ( tk > 2 ){
+    if ( poker_point(hd) > P3 ) { return -1; }
   } else {
+    if ( poker_point(hd) > P2 ) { return -1; }
   }
-  return 0;
+
+  return 2;
 }
