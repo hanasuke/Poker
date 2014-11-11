@@ -75,6 +75,10 @@ int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int
   arr_copy(myhd, hd, HNUM);
   check_myhd(myhd, hdnum, hdsuite);
 
+  if ( check_straight(hdnum) ) {
+    return -1;
+  }
+
   if ( check_flush(hdsuite) ) {
     return -1;
   }
