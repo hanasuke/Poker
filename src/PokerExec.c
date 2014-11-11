@@ -515,13 +515,13 @@ void make_dir(void)
   DIR *log_dir;                   // ログディレクトリ
 
   //----  ログディレクトリへのパス
-  strcpy(Dir, "../../log/");
+  strcpy(Dir, "log/");
   strcat(Dir, Name);
 
   //----  ログディレクトリの有無
   if ( (log_dir = opendir(Dir)) == NULL ) {
     //----  ログディレクトリの作成(mdコマンドの呼出)
-    strcpy(command, "mkdir");
+    strcpy(command, "mkdir ");
     strcat(command, Dir);
     system(command);
   }
