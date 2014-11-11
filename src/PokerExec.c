@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
   make_log();    // ログファイル
 
   //----  乱数の初期化
-  srand(time(NULL));
+  srand((unsigned) time(NULL));
   puts("");
 
   //----  トライ回数だけのゲームの反復
