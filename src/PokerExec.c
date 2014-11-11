@@ -1,313 +1,313 @@
 //====================================================================
-//  HŠw•”uî•ñŠÂ‹«ÀŒ±‚Qv(•x‰i)  CŒ¾ŒêƒvƒƒOƒ‰ƒ~ƒ“ƒO  —á‘è
-//  ƒ|[ƒJ[ƒQ[ƒ€‚Ìí—ª  ƒQ[ƒ€–{‘Ì
+//  å·¥å­¦éƒ¨ã€Œæƒ…å ±ç’°å¢ƒå®Ÿé¨“ï¼’ã€(å¯Œæ°¸)  Cè¨€èªãƒ—ãƒ­ã‚°ãƒ©ãƒŸãƒ³ã‚°  ä¾‹é¡Œ
+//  ãƒãƒ¼ã‚«ãƒ¼ã‚²ãƒ¼ãƒ ã®æˆ¦ç•¥  ã‚²ãƒ¼ãƒ æœ¬ä½“
 //--------------------------------------------------------------------
 //  Poker  PokerExec.c
 //  WinXP DOS  Borland C/C++ 5.5
 //--------------------------------------------------------------------
-//  •x‰iŒ¤‹†º  tominaga •x‰i_”V
+//  å¯Œæ°¸ç ”ç©¶å®¤  tominaga å¯Œæ°¸æµ©ä¹‹
 //  2013.10.22
 //====================================================================
 
 
 //====================================================================
-//  d—l
+//  ä»•æ§˜
 //====================================================================
 
 /*--------------------------------------------------------------------
 
-Œ¸ˆêŒ^(èD‚©‚ç1–‡‚ğÌ‚Ä‚Ä‚©‚çARD‚©‚ç1–‡‚ğ‰Á‚¦‚é)
+æ¸›ä¸€å‹(æ‰‹æœ­ã‹ã‚‰1æšã‚’æ¨ã¦ã¦ã‹ã‚‰ã€å±±æœ­ã‹ã‚‰1æšã‚’åŠ ãˆã‚‹)
 
 ---------------------------------------------------------------------*/
 
 
 //====================================================================
-//  –‘Oˆ—
+//  äº‹å‰å‡¦ç†
 //====================================================================
 
 //--------------------------------------------------------------------
-//  ƒwƒbƒ_ƒtƒ@ƒCƒ‹
+//  ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«
 //--------------------------------------------------------------------
 
-#include <stdio.h>     // •W€—Do—Í
-#include <stdlib.h>    // •W€ƒ‰ƒCƒuƒ‰ƒŠ
-#include <string.h>    // •¶š—ñˆ—
-#include <time.h>      // ŠÔŠÖ”
-#include <math.h>      // ”ŠwŠÖ”
-#include <dirent.h>    // ƒfƒBƒŒƒNƒgƒŠ‘€ì
+#include <stdio.h>     // æ¨™æº–å„ªå‡ºåŠ›
+#include <stdlib.h>    // æ¨™æº–ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
+#include <string.h>    // æ–‡å­—åˆ—å‡¦ç†
+#include <time.h>      // æ™‚é–“é–¢æ•°
+#include <math.h>      // æ•°å­¦é–¢æ•°
+#include <dirent.h>    // ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ“ä½œ
 
-#include "Poker.h"     // ‰Û‘èƒ‰ƒCƒuƒ‰ƒŠ‚Ìƒwƒbƒ_ƒtƒ@ƒCƒ‹(‘Š‘ÎƒpƒXw’è)
+#include "Poker.h"     // èª²é¡Œãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«(ç›¸å¯¾ãƒ‘ã‚¹æŒ‡å®š)
 
 
 //====================================================================
-//  ‘åˆæéŒ¾
+//  å¤§åŸŸå®£è¨€
 //====================================================================
 
 //--------------------------------------------------------------------
-//  ŠÖ”éŒ¾
+//  é–¢æ•°å®£è¨€
 //--------------------------------------------------------------------
 
-// ƒwƒbƒ_ƒtƒ@ƒCƒ‹Poker.h‚ğƒCƒ“ƒNƒ‹[ƒh
+// ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«Poker.hã‚’ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
 
 //--------------------------------------------------------------------
-//  ‘åˆæ•Ï”
+//  å¤§åŸŸå¤‰æ•°
 //--------------------------------------------------------------------
 
-char Name[GAME_NAME_LEN];         // ƒQ[ƒ€–¼
-int Trial;                        // ƒgƒ‰ƒC‰ñ”
-char Stck[FILE_NAME_LEN];         // RDƒtƒ@ƒCƒ‹
-int Disp_Mode;                    // •\¦ƒ‚[ƒh
-char Dir[DIR_NAME_LEN];           // ƒƒOƒfƒBƒŒƒNƒgƒŠ‚Ö‚ÌƒpƒX–¼
-FILE *Game_Log;                   // ƒQ[ƒ€ƒƒO‚Ö‚Ìƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^
-FILE *Result_Log;                     // Œ‹‰ÊƒƒO‚Ö‚Ìƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^
+char Name[GAME_NAME_LEN];         // ã‚²ãƒ¼ãƒ å
+int Trial;                        // ãƒˆãƒ©ã‚¤å›æ•°
+char Stck[FILE_NAME_LEN];         // å±±æœ­ãƒ•ã‚¡ã‚¤ãƒ«
+int Disp_Mode;                    // è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰
+char Dir[DIR_NAME_LEN];           // ãƒ­ã‚°ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¸ã®ãƒ‘ã‚¹å
+FILE *Game_Log;                   // ã‚²ãƒ¼ãƒ ãƒ­ã‚°ã¸ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿
+FILE *Result_Log;                     // çµæœãƒ­ã‚°ã¸ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿
 int Hand_Value[10] = {P0, P1, P2, P3, P4, P5, P6, P7, P8, P9};
 double Take_Weight[10] = {1.0, 1.0, 1.5, 1.5, 2.0, 2.0};
 
 
 //====================================================================
-//  –{‘ÌŠÖ”
+//  æœ¬ä½“é–¢æ•°
 //====================================================================
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
-  //----  ‹ÇŠéŒ¾
-  int point[GNUM][TAKE];    // Še‰ñ“¾“_
-  FILE *fp;                 // RD‚Ö‚Ìƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^
-  double total;             // ‘‡“¾“_
-  double ave;               // •½‹Ï“¾“_
-  int k;                    // ”½•œ•Ï”
+  //----  å±€æ‰€å®£è¨€
+  int point[GNUM][TAKE];    // å„å›å¾—ç‚¹
+  FILE *fp;                 // å±±æœ­ã¸ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿
+  double total;             // ç·åˆå¾—ç‚¹
+  double ave;               // å¹³å‡å¾—ç‚¹
+  int k;                    // åå¾©å¤‰æ•°
 
-  //----  ƒRƒ}ƒ“ƒhˆø”‚ÌŠm”F
+  //----  ã‚³ãƒãƒ³ãƒ‰å¼•æ•°ã®ç¢ºèª
   if ( argc < 5 ) {
-    puts("ERROR : ƒRƒ}ƒ“ƒhˆø”‚ª•s³‚Å‚·B");
-    puts("Àsƒpƒ‰ƒƒ^ : ƒQ[ƒ€–¼ ƒgƒ‰ƒC‰ñ” RDƒtƒ@ƒCƒ‹ •\¦ƒ‚[ƒh");
+    puts("ERROR : ã‚³ãƒãƒ³ãƒ‰å¼•æ•°ãŒä¸æ­£ã§ã™ã€‚");
+    puts("å®Ÿè¡Œãƒ‘ãƒ©ãƒ¡ã‚¿ : ã‚²ãƒ¼ãƒ å ãƒˆãƒ©ã‚¤å›æ•° å±±æœ­ãƒ•ã‚¡ã‚¤ãƒ« è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰");
     exit(EXIT_FAILURE);
   }
 
-  //----  ƒRƒ}ƒ“ƒhˆø”‚ÌŠi”[
-  strcpy(Name, argv[1]);    // ƒQ[ƒ€–¼
-  Trial = atoi(argv[2]);    // ƒgƒ‰ƒC‰ñ”
-  strcpy(Stck, argv[3]);    // RDƒtƒ@ƒCƒ‹
-  Disp_Mode = atoi(argv[4]);     // •\¦ƒ‚[ƒh
+  //----  ã‚³ãƒãƒ³ãƒ‰å¼•æ•°ã®æ ¼ç´
+  strcpy(Name, argv[1]);    // ã‚²ãƒ¼ãƒ å
+  Trial = atoi(argv[2]);    // ãƒˆãƒ©ã‚¤å›æ•°
+  strcpy(Stck, argv[3]);    // å±±æœ­ãƒ•ã‚¡ã‚¤ãƒ«
+  Disp_Mode = atoi(argv[4]);     // è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰
 
-  //----  ƒgƒ‰ƒC‰ñ”‚ÌŠm”F
+  //----  ãƒˆãƒ©ã‚¤å›æ•°ã®ç¢ºèª
   if ( Trial > GNUM ) {
-    puts("ERROR : ƒgƒ‰ƒC‰ñ”‚ª‘½‚·‚¬‚Ü‚·B");
+    puts("ERROR : ãƒˆãƒ©ã‚¤å›æ•°ãŒå¤šã™ãã¾ã™ã€‚");
     exit(EXIT_FAILURE);
   }
 
-  //----  RDƒtƒ@ƒCƒ‹‚ÌƒI[ƒvƒ“‚ÆƒGƒ‰[ˆ—
+  //----  å±±æœ­ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ªãƒ¼ãƒ—ãƒ³ã¨ã‚¨ãƒ©ãƒ¼å‡¦ç†
   fp = fopen(Stck, "r");
   if ( fp == NULL ) {
-    puts("ERROR : RDƒtƒ@ƒCƒ‹‚Ìw’è‚ª•s³‚Å‚·B");
+    puts("ERROR : å±±æœ­ãƒ•ã‚¡ã‚¤ãƒ«ã®æŒ‡å®šãŒä¸æ­£ã§ã™ã€‚");
     exit(EXIT_FAILURE);
   }
 
-  //----  ƒtƒ@ƒCƒ‹‚Ìì¬
-  make_dir();    // ƒfƒBƒŒƒNƒgƒŠ
-  make_log();    // ƒƒOƒtƒ@ƒCƒ‹
+  //----  ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
+  make_dir();    // ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+  make_log();    // ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«
 
-  //----  —”‚Ì‰Šú‰»
+  //----  ä¹±æ•°ã®åˆæœŸåŒ–
   srand(time(NULL));
   puts("");
 
-  //----  ƒgƒ‰ƒC‰ñ”‚¾‚¯‚ÌƒQ[ƒ€‚Ì”½•œ
+  //----  ãƒˆãƒ©ã‚¤å›æ•°ã ã‘ã®ã‚²ãƒ¼ãƒ ã®åå¾©
   total = 0.0;
   for ( k = 0; k < Trial; k++ ) {
     total += poker_exec(fp, point[k]);
   }
 
-  //----  Œ‹‰Ê•\‚Ìo—Í
+  //----  çµæœè¡¨ã®å‡ºåŠ›
   result_show(point);
 
-  //----  •½‹Ï“_‚Ìo—Í
+  //----  å¹³å‡ç‚¹ã®å‡ºåŠ›
   ave = (double) total / Trial;
   my_printf(Result_Log, "\n");
-  my_printf_d(Result_Log, "•½‹Ï“¾“_ :  %lf\n", ave);
+  my_printf_d(Result_Log, "å¹³å‡å¾—ç‚¹ :  %lf\n", ave);
 
-  //----  ƒtƒ@ƒCƒ‹‚ÌƒNƒ[ƒY
+  //----  ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¯ãƒ­ãƒ¼ã‚º
   fclose(fp);
   fclose(Game_Log);
   fclose(Result_Log);
 
-  //----  I—¹
+  //----  çµ‚äº†
   return 0;
 }
 
 
 //====================================================================
-//  ƒ|[ƒJ[‚Ìis
+//  ãƒãƒ¼ã‚«ãƒ¼ã®é€²è¡Œ
 //====================================================================
 
 //--------------------------------------------------------------------
-//  Šeƒgƒ‰ƒC‚Ìis
+//  å„ãƒˆãƒ©ã‚¤ã®é€²è¡Œ
 //--------------------------------------------------------------------
 
-double poker_exec(FILE *fp, int point[]) 
+double poker_exec(FILE *fp, int point[])
 {
-  //----  ‹ÇŠ•Ï”
-  int stock[CNUM];            // RD
-  int used[CNUM];             // ÌD”z—ñ
-  int us;                     // ÌD”
-  double try_p;               // ƒgƒ‰ƒC“¾“_
-  int tk;                     // ƒeƒCƒN”
-  
-  //----  ƒgƒ‰ƒC‚Ì€”õ
-  card_stock(stock, fp);      // RD‚Ì¶¬
-  
-  //----  ƒgƒ‰ƒC‚ÌÅ’†(ƒeƒCƒN‚ğŒJ‚è•Ô‚·)
+  //----  å±€æ‰€å¤‰æ•°
+  int stock[CNUM];            // å±±æœ­
+  int used[CNUM];             // æ¨æœ­é…åˆ—
+  int us;                     // æ¨æœ­æ•°
+  double try_p;               // ãƒˆãƒ©ã‚¤å¾—ç‚¹
+  int tk;                     // ãƒ†ã‚¤ã‚¯æ•°
+
+  //----  ãƒˆãƒ©ã‚¤ã®æº–å‚™
+  card_stock(stock, fp);      // å±±æœ­ã®ç”Ÿæˆ
+
+  //----  ãƒˆãƒ©ã‚¤ã®æœ€ä¸­(ãƒ†ã‚¤ã‚¯ã‚’ç¹°ã‚Šè¿”ã™)
   us = 0;
   try_p = 0;
   for ( tk = 0; tk < TAKE; tk++ ) {
     point[tk] = poker_take(stock, tk, used, &us);
     try_p += point[tk] * Take_Weight[tk];
   }
-  
+
   switch ( Disp_Mode ) {
   case 1:
-    // ƒgƒ‰ƒC“¾“_‚Ì•\¦(ƒƒO•Û‘¶•t)
-    my_printf_i(Game_Log, "ƒgƒ‰ƒC“¾“_ : %4d\n", try_p);
+    // ãƒˆãƒ©ã‚¤å¾—ç‚¹ã®è¡¨ç¤º(ãƒ­ã‚°ä¿å­˜ä»˜)
+    my_printf_i(Game_Log, "ãƒˆãƒ©ã‚¤å¾—ç‚¹ : %4d\n", try_p);
     break;
   case 0:
-    // ƒgƒ‰ƒC“¾“_‚ÌƒƒO‚Ö‚Ì•Û‘¶
-    fprintf(Game_Log, "ƒgƒ‰ƒC“¾“_ : %4d\n", try_p);
+    // ãƒˆãƒ©ã‚¤å¾—ç‚¹ã®ãƒ­ã‚°ã¸ã®ä¿å­˜
+    fprintf(Game_Log, "ãƒˆãƒ©ã‚¤å¾—ç‚¹ : %4d\n", try_p);
     break;
   }
-  
+
   return try_p;
 }
 
 //--------------------------------------------------------------------
-//  ƒeƒCƒN‚ÌÀs
+//  ãƒ†ã‚¤ã‚¯ã®å®Ÿè¡Œ
 //--------------------------------------------------------------------
 
-int poker_take(const int stock[], int tk, int used[], int *us) 
+int poker_take(const int stock[], int tk, int used[], int *us)
 {
-  //----  ‹ÇŠ•Ï”
-  int field[FNUM];            // êD
-  int hand[HNUM];             // èD
-  int state[CHNG+1][HNUM];    // ‹Ç–Ê(èD‚Ì—ñ)
-  int ope[CHNG];              // ‘ÅèD
-  int the;                    // ‘Åè
-  int cg;                     // ƒ`ƒFƒ“ƒW‰ñ”
-  int take_p;                 // ƒeƒCƒN“¾“_
-  int k;                      // ”½•œ•Ï”
+  //----  å±€æ‰€å¤‰æ•°
+  int field[FNUM];            // å ´æœ­
+  int hand[HNUM];             // æ‰‹æœ­
+  int state[CHNG+1][HNUM];    // å±€é¢(æ‰‹æœ­ã®åˆ—)
+  int ope[CHNG];              // æ‰“æ‰‹æœ­
+  int the;                    // æ‰“æ‰‹
+  int cg;                     // ãƒã‚§ãƒ³ã‚¸å›æ•°
+  int take_p;                 // ãƒ†ã‚¤ã‚¯å¾—ç‚¹
+  int k;                      // åå¾©å¤‰æ•°
 
-  //----  ƒeƒCƒN‚Ì€”õ
+  //----  ãƒ†ã‚¤ã‚¯ã®æº–å‚™
   if ( *us +5 < CNUM ) {
-    arr_copy(hand, &stock[*us], HNUM); // èD‚Ì”z•z(5–‡)
-    arr_copy(state[0], hand, HNUM);    // ‹Ç–Ê‚Ì‹L˜^
+    arr_copy(hand, &stock[*us], HNUM); // æ‰‹æœ­ã®é…å¸ƒ(5æš)
+    arr_copy(state[0], hand, HNUM);    // å±€é¢ã®è¨˜éŒ²
   } else {
     return 0;
   }
 
-  //----  ƒeƒCƒN‚ÌÅ’†(ƒ`ƒFƒ“ƒW‚ÌŒJ•Ô‚µ)
+  //----  ãƒ†ã‚¤ã‚¯ã®æœ€ä¸­(ãƒã‚§ãƒ³ã‚¸ã®ç¹°è¿”ã—)
   for ( cg = 0; cg < CHNG; cg++ ) {
-    //----  
+    //----
     if ( *us < CNUM-5 ) {
-      the = strategy(hand, field, cg, tk, used, *us);  // í—ª‚É‚æ‚èÌD‚ğŒˆ’è
+      the = strategy(hand, field, cg, tk, used, *us);  // æˆ¦ç•¥ã«ã‚ˆã‚Šæ¨æœ­ã‚’æ±ºå®š
     } else {
       the = -1; break;
     }
-    //----  
-    ope[cg] = hand[the];                  // ‘ÅèD‚Ì‹L˜^
-    if ( the < 0 ) { break; }             // èD‚ğŒğŠ·‚¹‚¸‚ÉƒeƒCƒNI—¹
-    field[cg] = ope[cg];                  // ÌD‚ğêD‚É’Ç‰Á
-    used[(*us)++] = ope[cg];              // ÌD‚ğÌD”z—ñ‚É’Ç‰Á
-    hand[the] = stock[HNUM-1+(*us)];      // èD‚ğŒğŠ·
-    arr_copy(state[cg+1], hand, HNUM);    // ‹Ç–Ê‚Ì‹L˜^
+    //----
+    ope[cg] = hand[the];                  // æ‰“æ‰‹æœ­ã®è¨˜éŒ²
+    if ( the < 0 ) { break; }             // æ‰‹æœ­ã‚’äº¤æ›ã›ãšã«ãƒ†ã‚¤ã‚¯çµ‚äº†
+    field[cg] = ope[cg];                  // æ¨æœ­ã‚’å ´æœ­ã«è¿½åŠ 
+    used[(*us)++] = ope[cg];              // æ¨æœ­ã‚’æ¨æœ­é…åˆ—ã«è¿½åŠ 
+    hand[the] = stock[HNUM-1+(*us)];      // æ‰‹æœ­ã‚’äº¤æ›
+    arr_copy(state[cg+1], hand, HNUM);    // å±€é¢ã®è¨˜éŒ²
   }
 
-  //----  ƒeƒCƒN‚ÌŒãˆ—
-  take_p = poker_point(hand);                 // ƒeƒCƒN“¾“_
+  //----  ãƒ†ã‚¤ã‚¯ã®å¾Œå‡¦ç†
+  take_p = poker_point(hand);                 // ãƒ†ã‚¤ã‚¯å¾—ç‚¹
 
   for ( k = 0; k < HNUM; k++ ) {
-    used[*us] = hand[k];                      // èD‚ğÌD”z—ñ‚É’Ç‰Á
+    used[*us] = hand[k];                      // æ‰‹æœ­ã‚’æ¨æœ­é…åˆ—ã«è¿½åŠ 
     (*us)++;
   }
 
-  //----  ƒeƒCƒN‚ÌŒo‰ß•\¦
+  //----  ãƒ†ã‚¤ã‚¯ã®çµŒéè¡¨ç¤º
   switch ( Disp_Mode ) {
   case 1:
-    take_show(state, ope, field, cg, take_p); // ƒeƒCƒN‚Ì•\¦
-    //----  ƒeƒCƒN“¾“_‚Ì•\¦
-    my_printf_i(Game_Log, "ƒeƒCƒN‘f“_ : %4d\n", take_p);
-    my_printf_i(Game_Log, "ƒeƒCƒN“¾“_ : %4d\n", take_p*Take_Weight[tk]);
+    take_show(state, ope, field, cg, take_p); // ãƒ†ã‚¤ã‚¯ã®è¡¨ç¤º
+    //----  ãƒ†ã‚¤ã‚¯å¾—ç‚¹ã®è¡¨ç¤º
+    my_printf_i(Game_Log, "ãƒ†ã‚¤ã‚¯ç´ ç‚¹ : %4d\n", take_p);
+    my_printf_i(Game_Log, "ãƒ†ã‚¤ã‚¯å¾—ç‚¹ : %4d\n", take_p*Take_Weight[tk]);
     break;
   case 0:
-    take_log(Game_Log, state, ope, field, cg, take_p);   // ƒeƒCƒN‚ÌƒƒO
-    //----  ƒeƒCƒN“¾“_‚ÌƒƒO‚Ö‚Ì•Û‘¶
-    fprintf(Game_Log, "ƒeƒCƒN“¾“_ : %3d\n", take_p);
+    take_log(Game_Log, state, ope, field, cg, take_p);   // ãƒ†ã‚¤ã‚¯ã®ãƒ­ã‚°
+    //----  ãƒ†ã‚¤ã‚¯å¾—ç‚¹ã®ãƒ­ã‚°ã¸ã®ä¿å­˜
+    fprintf(Game_Log, "ãƒ†ã‚¤ã‚¯å¾—ç‚¹ : %3d\n", take_p);
     break;
   }
-  
+
   return take_p;
 }
 
 
 //====================================================================
-//  ƒQ[ƒ€‚Ì•\¦
+//  ã‚²ãƒ¼ãƒ ã®è¡¨ç¤º
 //====================================================================
 
 //--------------------------------------------------------------------
-//  ƒeƒCƒN‚Ì•\¦
+//  ãƒ†ã‚¤ã‚¯ã®è¡¨ç¤º
 //--------------------------------------------------------------------
 
-void take_show(int st[][HNUM], int ope[], int fd[], int cg, int tp) 
+void take_show(int st[][HNUM], int ope[], int fd[], int cg, int tp)
 {
   int k;
   int p;
   for ( k = 0; k <= cg; k++ ) {
-    //----  èD‚Ì•\¦
-    my_printf_i(Game_Log, "[%d] ", k); 
-    card_show(st[k], HNUM); 
+    //----  æ‰‹æœ­ã®è¡¨ç¤º
+    my_printf_i(Game_Log, "[%d] ", k);
+    card_show(st[k], HNUM);
     card_show_log(Game_Log, st[k], HNUM);
-    //----  ÌD‚Ì•\¦
+    //----  æ¨æœ­ã®è¡¨ç¤º
     if ( k < cg ) { my_printf_c(Game_Log, " >%s", card_str(ope[k])); }
     my_printf(Game_Log, "\n");
   }
 }
 
 //--------------------------------------------------------------------
-//  ƒeƒCƒN‚ÌƒƒOƒtƒ@ƒCƒ‹‚Ö‚Ì‘o‚µ
+//  ãƒ†ã‚¤ã‚¯ã®ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®æ›¸å‡ºã—
 //--------------------------------------------------------------------
 
-void take_log(FILE *fp, int st[][HNUM], int ope[], int fd[], int cg, int tp) 
+void take_log(FILE *fp, int st[][HNUM], int ope[], int fd[], int cg, int tp)
 {
   int k;
   int p;
   for ( k = 0; k <= cg; k++ ) {
-    //----  èD‚Ì•\¦
-    fprintf(Game_Log, "[%d] ", k); 
-    //card_show(st[k], HNUM); 
+    //----  æ‰‹æœ­ã®è¡¨ç¤º
+    fprintf(Game_Log, "[%d] ", k);
+    //card_show(st[k], HNUM);
     card_show_log(Game_Log, st[k], HNUM);
-    //----  ÌD‚Ì•\¦
+    //----  æ¨æœ­ã®è¡¨ç¤º
     if ( k < cg ) { fprintf(Game_Log, " >%s", card_str(ope[k])); }
     fprintf(Game_Log, "\n");
   }
 }
 
 //--------------------------------------------------------------------
-//  Œ‹‰Ê•\‚Ì•\¦
+//  çµæœè¡¨ã®è¡¨ç¤º
 //--------------------------------------------------------------------
 
-void result_show(int point[][TAKE]) 
+void result_show(int point[][TAKE])
 {
   int i, j, k;
-  int deg[POINT_NUM][TAKE];    // 
-  int sum[POINT_NUM];          // 
-  double scr[TAKE] = {0.0};    // 
-  double total = 0.0;          // 
+  int deg[POINT_NUM][TAKE];    //
+  int sum[POINT_NUM];          //
+  double scr[TAKE] = {0.0};    //
+  double total = 0.0;          //
 
-  //----  ”z—ñ‚Ì‰Šú‰»
+  //----  é…åˆ—ã®åˆæœŸåŒ–
   for( k = POINT_MIN; k <= POINT_MAX; k++ ) {
     sum[k] = 0;
     for( j = 0; j < TAKE; j++ ) {
       deg[k][j] = 0;
     }
   }
-  
-  //----  –ğ‚²‚Æ‚ÌWŒv
+
+  //----  å½¹ã”ã¨ã®é›†è¨ˆ
   for ( i = 0; i < Trial; i++ ) {
     for ( j = 0; j < TAKE; j++ ) {
       switch( point[i][j] ) {
@@ -326,7 +326,7 @@ void result_show(int point[][TAKE])
     }
   }
 
-  //----  ‘SƒeƒCƒN‚Å‚Ì–ğ‚Ì‘”
+  //----  å…¨ãƒ†ã‚¤ã‚¯ã§ã®å½¹ã®ç·æ•°
   for( k = POINT_MIN; k <= POINT_MAX; k++ ) {
     for( j = 0; j < TAKE; j++ ) {
       sum[k] += deg[k][j];
@@ -335,13 +335,13 @@ void result_show(int point[][TAKE])
   }
   puts("");
 
-  //----  Œ‹‰Ê•\‚ÌƒeƒCƒN”Ô†‚Ì•\¦
-  my_printf(Result_Log, "        –ğ–¼         ");
+  //----  çµæœè¡¨ã®ãƒ†ã‚¤ã‚¯ç•ªå·ã®è¡¨ç¤º
+  my_printf(Result_Log, "        å½¹å         ");
   for( i = 0; i < TAKE; i++ ) {
     my_printf_i(Result_Log, "| take%d", i+1);
   }
-  my_printf(Result_Log, "|  ‡Œv  \n");
-  //-----  Œ‹‰Ê•\‚Ì‹æØü‚Ì•\¦
+  my_printf(Result_Log, "|  åˆè¨ˆ  \n");
+  //-----  çµæœè¡¨ã®åŒºåˆ‡ç·šã®è¡¨ç¤º
   my_printf(Result_Log, "---------------------");
   for( i = 0; i <= TAKE; i++ ) {
     my_printf(Result_Log, "+------");
@@ -349,22 +349,22 @@ void result_show(int point[][TAKE])
   my_printf(Result_Log, "\n");
 
   for ( i = POINT_MIN; i <= POINT_MAX; i++ ) {
-    //----  Œ‹‰Ê•\‚Ì–ğ–¼‚Ì•\¦
+    //----  çµæœè¡¨ã®å½¹åã®è¡¨ç¤º
     switch( i ) {
-      case 9: my_printf(Result_Log, "ƒƒCƒ„ƒ‹ƒXƒgƒŒ[ƒg   "); break;
-      case 8: my_printf(Result_Log, "ƒXƒgƒŒ[ƒgƒtƒ‰ƒbƒVƒ… "); break;
-      case 7: my_printf(Result_Log, "ƒtƒH[ƒJ[ƒh         "); break;
-      case 6: my_printf(Result_Log, "ƒtƒ‹ƒnƒEƒX           "); break;
-      case 5: my_printf(Result_Log, "ƒtƒ‰ƒbƒVƒ…           "); break;
-      case 4: my_printf(Result_Log, "ƒXƒgƒŒ[ƒg           "); break;
-      case 3: my_printf(Result_Log, "ƒXƒŠ[ƒJ[ƒh         "); break;
-      case 2: my_printf(Result_Log, "ƒc[ƒyƒA             "); break;
-      case 1: my_printf(Result_Log, "ƒƒ“ƒyƒA             "); break;
-      case 0: my_printf(Result_Log, "ƒm[ƒyƒA             "); break;
+      case 9: my_printf(Result_Log, "ãƒ­ã‚¤ãƒ¤ãƒ«ã‚¹ãƒˆãƒ¬ãƒ¼ãƒˆ   "); break;
+      case 8: my_printf(Result_Log, "ã‚¹ãƒˆãƒ¬ãƒ¼ãƒˆãƒ•ãƒ©ãƒƒã‚·ãƒ¥ "); break;
+      case 7: my_printf(Result_Log, "ãƒ•ã‚©ãƒ¼ã‚«ãƒ¼ãƒ‰         "); break;
+      case 6: my_printf(Result_Log, "ãƒ•ãƒ«ãƒã‚¦ã‚¹           "); break;
+      case 5: my_printf(Result_Log, "ãƒ•ãƒ©ãƒƒã‚·ãƒ¥           "); break;
+      case 4: my_printf(Result_Log, "ã‚¹ãƒˆãƒ¬ãƒ¼ãƒˆ           "); break;
+      case 3: my_printf(Result_Log, "ã‚¹ãƒªãƒ¼ã‚«ãƒ¼ãƒ‰         "); break;
+      case 2: my_printf(Result_Log, "ãƒ„ãƒ¼ãƒšã‚¢             "); break;
+      case 1: my_printf(Result_Log, "ãƒ¯ãƒ³ãƒšã‚¢             "); break;
+      case 0: my_printf(Result_Log, "ãƒãƒ¼ãƒšã‚¢             "); break;
       default : break;
     }
     for ( j = 0; j < TAKE; j++ ) {
-      //----  Œ‹‰Ê•\‚Ì–ğ•p“x‚Ì•\¦
+      //----  çµæœè¡¨ã®å½¹é »åº¦ã®è¡¨ç¤º
       my_printf_i(Result_Log, "|%6d", deg[i][j]);
       if( j == TAKE-1 ) {
         my_printf_i(Result_Log, "|%6d", sum[i]);
@@ -373,22 +373,22 @@ void result_show(int point[][TAKE])
     my_printf(Result_Log, "\n");
   }
 
-  //-----  Œ‹‰Ê•\‚Ì‹æØü‚Ì•\¦
+  //-----  çµæœè¡¨ã®åŒºåˆ‡ç·šã®è¡¨ç¤º
   my_printf(Result_Log, "---------------------");
   for( i = 0; i <= TAKE; i++ ) {
     my_printf(Result_Log, "+------");
   }
   my_printf(Result_Log, "\n");
 
-  //----  
-  my_printf(Result_Log, "’Pƒ‘f“_             ");
+  //----
+  my_printf(Result_Log, "å˜ç´”ç´ ç‚¹             ");
   for ( j = 0; j < TAKE; j++ ) {
     my_printf_d(Result_Log, "|%6.2f", scr[j] / Trial);
   }
   my_printf(Result_Log, "|\n");
 
-  //----  
-  my_printf(Result_Log, "ŒXÎ“¾“_             ");
+  //----
+  my_printf(Result_Log, "å‚¾æ–œå¾—ç‚¹             ");
   for ( j = 0; j < TAKE; j++ ) {
     my_printf_d(Result_Log, "|%6.2f", scr[j] * Take_Weight[j]/Trial);
     total += scr[j] * Take_Weight[j];
@@ -398,76 +398,76 @@ void result_show(int point[][TAKE])
 
 
 //====================================================================
-//  ƒ|[ƒJ[‚Ì–ğ‚Æ“¾“_
+//  ãƒãƒ¼ã‚«ãƒ¼ã®å½¹ã¨å¾—ç‚¹
 //====================================================================
 
 //--------------------------------------------------------------------
-//  ƒ|[ƒJ[‚Ì“¾“_
+//  ãƒãƒ¼ã‚«ãƒ¼ã®å¾—ç‚¹
 //--------------------------------------------------------------------
 
-int poker_point(int hand[]) 
+int poker_point(int hand[])
 {
-  //----  ‹ÇŠéŒ¾
-  int num[13] = {0};     // ”ˆÊ‚²‚Æ‚ÌŒÂ”‚ğŠi”[‚·‚é”z—ñ(A23456789TJQK)
-  int sut[4] = {0};      // í—Ş‚²‚Æ‚ÌŒÂ”‚ğŠi”[‚·‚é”z—ñ(SHDC)
-  int p0, p1, p2, p3;    // ÅI‚¨‚æ‚ÑŒn•Ê‚Ì–ğ‚Ì“¾“_
-  int k;    // ”½•œ•Ï”
-  int t;    // ˆê•Ï”
+  //----  å±€æ‰€å®£è¨€
+  int num[13] = {0};     // æ•°ä½ã”ã¨ã®å€‹æ•°ã‚’æ ¼ç´ã™ã‚‹é…åˆ—(A23456789TJQK)
+  int sut[4] = {0};      // ç¨®é¡ã”ã¨ã®å€‹æ•°ã‚’æ ¼ç´ã™ã‚‹é…åˆ—(SHDC)
+  int p0, p1, p2, p3;    // æœ€çµ‚ãŠã‚ˆã³ç³»åˆ¥ã®å½¹ã®å¾—ç‚¹
+  int k;    // åå¾©å¤‰æ•°
+  int t;    // ä¸€æ™‚å¤‰æ•°
 
-  //----  ”ˆÊ‚¨‚æ‚Ñí—Ş‚²‚Æ‚ÌŒv”
-  for ( k = 0; k < HNUM; k++ ) { t = hand[k] % 13; num[t]++; }    // ”ˆÊ
-  for ( k = 0; k < HNUM; k++ ) { t = hand[k] / 13; sut[t]++; }    // í—Ş
+  //----  æ•°ä½ãŠã‚ˆã³ç¨®é¡ã”ã¨ã®è¨ˆæ•°
+  for ( k = 0; k < HNUM; k++ ) { t = hand[k] % 13; num[t]++; }    // æ•°ä½
+  for ( k = 0; k < HNUM; k++ ) { t = hand[k] / 13; sut[t]++; }    // ç¨®é¡
 
-  //----  Œn•Ê‚Ì–ğ‚Ì”»’è
-  p1 = poker_point_pair(num);            // ƒyƒAŒn
-  p2 = poker_point_flash(sut);           // ƒtƒ‰ƒbƒVƒ…Œn
-  p3 = poker_point_straight(num, p2);    // ƒXƒgƒŒ[ƒgŒn(ƒƒCƒ„ƒ‹”»’è‚Ì‚½‚ß‚Ìˆø”•t)
+  //----  ç³»åˆ¥ã®å½¹ã®åˆ¤å®š
+  p1 = poker_point_pair(num);            // ãƒšã‚¢ç³»
+  p2 = poker_point_flash(sut);           // ãƒ•ãƒ©ãƒƒã‚·ãƒ¥ç³»
+  p3 = poker_point_straight(num, p2);    // ã‚¹ãƒˆãƒ¬ãƒ¼ãƒˆç³»(ãƒ­ã‚¤ãƒ¤ãƒ«åˆ¤å®šã®ãŸã‚ã®å¼•æ•°ä»˜)
 
-  //----  Å‚“_‚Ì–ğ‚ğÌ—p
-  p0 = p1;                       // ƒyƒAŒn‚Ì–ğ‚Ì“¾“_
-  if ( p0 < p2 ) { p0 = p2; }    // ƒtƒ‰ƒbƒVƒ…Œn‚Ì–ğ‚Ö‚Ì•ÏX
-  if ( p0 < p3 ) { p0 = p3; }    // ƒXƒgƒŒ[ƒgŒn‚Ì–ğ‚Ö‚Ì•ÏX
+  //----  æœ€é«˜ç‚¹ã®å½¹ã‚’æ¡ç”¨
+  p0 = p1;                       // ãƒšã‚¢ç³»ã®å½¹ã®å¾—ç‚¹
+  if ( p0 < p2 ) { p0 = p2; }    // ãƒ•ãƒ©ãƒƒã‚·ãƒ¥ç³»ã®å½¹ã¸ã®å¤‰æ›´
+  if ( p0 < p3 ) { p0 = p3; }    // ã‚¹ãƒˆãƒ¬ãƒ¼ãƒˆç³»ã®å½¹ã¸ã®å¤‰æ›´
 
-  //----  Šm’è‚µ‚½–ğ‚Ì•Ô‹p
+  //----  ç¢ºå®šã—ãŸå½¹ã®è¿”å´
   return p0;
 }
 
 //--------------------------------------------------------------------
-//  ƒyƒA”»’è
+//  ãƒšã‚¢åˆ¤å®š
 //--------------------------------------------------------------------
 
-int poker_point_pair(int num[]) 
+int poker_point_pair(int num[])
 {
-  //----  ‹ÇŠéŒ¾
+  //----  å±€æ‰€å®£è¨€
   int c2 = 0, c3 = 0;
   int k;
 
-  //----  ƒtƒH[ƒJ[ƒh
+  //----  ãƒ•ã‚©ãƒ¼ã‚«ãƒ¼ãƒ‰
   for ( k = 0; k < 13; k++ ) { if ( num[k] == 4 ) { return P7; } }
 
-  //----  ‚»‚Ì‘¼‚ÌƒyƒA—v‘f‚ÌŒŸo
-  for ( k = 0; k < 13; k++ ) { 
-    if ( num[k] == 3 ) { c3++; } 
-    if ( num[k] == 2 ) { c2++; } 
+  //----  ãã®ä»–ã®ãƒšã‚¢è¦ç´ ã®æ¤œå‡º
+  for ( k = 0; k < 13; k++ ) {
+    if ( num[k] == 3 ) { c3++; }
+    if ( num[k] == 2 ) { c2++; }
   }
 
-  //----  ƒtƒ‹ƒnƒEƒX
+  //----  ãƒ•ãƒ«ãƒã‚¦ã‚¹
   if ( c3 == 1 && c2 == 1 ) { return P6; }
-  //----  ƒXƒŠ[ƒJƒCƒ“ƒY
+  //----  ã‚¹ãƒªãƒ¼ã‚«ã‚¤ãƒ³ã‚º
   if ( c3 == 1 ) { return P3; }
-  //----  ƒc[ƒyƒA
+  //----  ãƒ„ãƒ¼ãƒšã‚¢
   if ( c2 == 2 ) { return P2; }
-  //----  ƒƒ“ƒyƒA
+  //----  ãƒ¯ãƒ³ãƒšã‚¢
   if ( c2 == 1 ) { return P1; }
-  //----  ƒm[ƒyƒA
+  //----  ãƒãƒ¼ãƒšã‚¢
   return 0;
 }
 
 //--------------------------------------------------------------------
-//  ƒtƒ‰ƒbƒVƒ…”»’è
+//  ãƒ•ãƒ©ãƒƒã‚·ãƒ¥åˆ¤å®š
 //--------------------------------------------------------------------
 
-int poker_point_flash(int sut[]) 
+int poker_point_flash(int sut[])
 {
   int k;
   for ( k = 0; k < 4; k++ ) { if ( sut[k] == 5 ) { return P5; } }
@@ -475,52 +475,52 @@ int poker_point_flash(int sut[])
 }
 
 //--------------------------------------------------------------------
-//  ƒXƒgƒŒ[ƒg”»’è
+//  ã‚¹ãƒˆãƒ¬ãƒ¼ãƒˆåˆ¤å®š
 //--------------------------------------------------------------------
 
-int poker_point_straight(int num[], int p) 
+int poker_point_straight(int num[], int p)
 {
   int len = 0;
   int k;
   for ( k = 0; k < 13; k++ ) {
-    if ( num[k] > 0 ) { 
-      len++; 
+    if ( num[k] > 0 ) {
+      len++;
       if ( len == 5 ) { break; }
     } else { len = 0; }
   }
 
-  //----  ƒƒCƒ„ƒ‹ƒXƒgƒŒ[ƒg(TJQKA)
+  //----  ãƒ­ã‚¤ãƒ¤ãƒ«ã‚¹ãƒˆãƒ¬ãƒ¼ãƒˆ(TJQKA)
   if ( len == 4 && num[0] == 1 ) { len = 6; }
-  //----  ƒƒCƒ„ƒ‹ƒXƒgƒŒ[ƒgƒtƒ‰ƒbƒVƒ…
+  //----  ãƒ­ã‚¤ãƒ¤ãƒ«ã‚¹ãƒˆãƒ¬ãƒ¼ãƒˆãƒ•ãƒ©ãƒƒã‚·ãƒ¥
   if ( len == 6 ) { if ( p > 0 ) { return P9; } else { return P4; } }
-  //----  ƒm[ƒ}ƒ‹ƒXƒgƒŒ[ƒg
+  //----  ãƒãƒ¼ãƒãƒ«ã‚¹ãƒˆãƒ¬ãƒ¼ãƒˆ
   if ( len == 5 ) { if ( p > 0 ) { return P8; } else { return P4; } }
 
-  //----  
+  //----
   return 0;
 }
 
 
 //====================================================================
-//  ƒtƒ@ƒCƒ‹ˆ—
+//  ãƒ•ã‚¡ã‚¤ãƒ«å‡¦ç†
 //====================================================================
 
 //--------------------------------------------------------------------
-//  ƒƒOƒfƒBƒŒƒNƒgƒŠ‚Ìì¬
+//  ãƒ­ã‚°ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ä½œæˆ
 //--------------------------------------------------------------------
 
-void make_dir(void) 
+void make_dir(void)
 {
-  char command[COMM_LEN];         // ƒVƒXƒeƒ€ƒRƒ}ƒ“ƒh
-  DIR *log_dir;                   // ƒƒOƒfƒBƒŒƒNƒgƒŠ
+  char command[COMM_LEN];         // ã‚·ã‚¹ãƒ†ãƒ ã‚³ãƒãƒ³ãƒ‰
+  DIR *log_dir;                   // ãƒ­ã‚°ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 
-  //----  ƒƒOƒfƒBƒŒƒNƒgƒŠ‚Ö‚ÌƒpƒX
+  //----  ãƒ­ã‚°ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¸ã®ãƒ‘ã‚¹
   strcpy(Dir, "..\\..\\log\\");
   strcat(Dir, Name);
 
-  //----  ƒƒOƒfƒBƒŒƒNƒgƒŠ‚Ì—L–³
+  //----  ãƒ­ã‚°ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®æœ‰ç„¡
   if ( (log_dir = opendir(Dir)) == NULL ) {
-    //----  ƒƒOƒfƒBƒŒƒNƒgƒŠ‚Ìì¬(mdƒRƒ}ƒ“ƒh‚ÌŒÄo)
+    //----  ãƒ­ã‚°ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ä½œæˆ(mdã‚³ãƒãƒ³ãƒ‰ã®å‘¼å‡º)
     strcpy(command, "md ");
     strcat(command, Dir);
     system(command);
@@ -528,41 +528,41 @@ void make_dir(void)
 }
 
 //--------------------------------------------------------------------
-//  ƒƒOƒtƒ@ƒCƒ‹‚Ìì¬
+//  ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
 //--------------------------------------------------------------------
 
-void make_log(void) 
+void make_log(void)
 {
-  char path1[FILE_NAME_LEN];            // Game.log‚Ö‚ÌƒpƒX
-  char path2[FILE_NAME_LEN];            // Result.txt‚Ö‚ÌƒpƒX
-  char path3[FILE_NAME_LEN];            // Stock.ini‚Ö‚ÌƒpƒX
-  char command[COMM_LEN];               // ƒVƒXƒeƒ€ƒRƒ}ƒ“ƒh
+  char path1[FILE_NAME_LEN];            // Game.logã¸ã®ãƒ‘ã‚¹
+  char path2[FILE_NAME_LEN];            // Result.txtã¸ã®ãƒ‘ã‚¹
+  char path3[FILE_NAME_LEN];            // Stock.iniã¸ã®ãƒ‘ã‚¹
+  char command[COMM_LEN];               // ã‚·ã‚¹ãƒ†ãƒ ã‚³ãƒãƒ³ãƒ‰
 
-  //---- Game.log‚Ö‚ÌƒpƒX‚ğì¬
-  strcpy(path1, Dir); 
+  //---- Game.logã¸ã®ãƒ‘ã‚¹ã‚’ä½œæˆ
+  strcpy(path1, Dir);
   strcat(path1, "\\Game.log");
 
-  //---- Result.txt‚Ö‚ÌƒpƒX‚ğì¬
-  strcpy(path2, Dir); 
+  //---- Result.txtã¸ã®ãƒ‘ã‚¹ã‚’ä½œæˆ
+  strcpy(path2, Dir);
   strcat(path2, "\\Result.txt");
 
-  //---- Stock.ini‚Ö‚ÌƒpƒX‚ğì¬
-  strcpy(path3, Dir); 
-  strcat(path3, "\\Stock.ini"); 
+  //---- Stock.iniã¸ã®ãƒ‘ã‚¹ã‚’ä½œæˆ
+  strcpy(path3, Dir);
+  strcat(path3, "\\Stock.ini");
 
-  //---- Game.log‚ÌƒI[ƒvƒ“
+  //---- Game.logã®ã‚ªãƒ¼ãƒ—ãƒ³
   if( (Game_Log = fopen(path1, "w")) == NULL ) {
-    printf("Game.log‚ğƒI[ƒvƒ“‚Å‚«‚È‚¢\n");
+    printf("Game.logã‚’ã‚ªãƒ¼ãƒ—ãƒ³ã§ããªã„\n");
     exit(1);
   }
 
-  //---- Result.txt‚ÌƒI[ƒvƒ“
+  //---- Result.txtã®ã‚ªãƒ¼ãƒ—ãƒ³
   if( (Result_Log = fopen(path2, "w")) == NULL ) {
-    printf("Result.txt‚ğƒI[ƒvƒ“‚Å‚«‚È‚¢\n");
+    printf("Result.txtã‚’ã‚ªãƒ¼ãƒ—ãƒ³ã§ããªã„\n");
     exit(1);
   }
 
-  //---- Stock.ini‚ÌƒRƒs[(copyƒRƒ}ƒ“ƒh‚ÌŒÄo)
+  //---- Stock.iniã®ã‚³ãƒ”ãƒ¼(copyã‚³ãƒãƒ³ãƒ‰ã®å‘¼å‡º)
   strcpy(command, "copy ");
   strcat(command, Stck);
   strcat(command, " ");
@@ -571,34 +571,33 @@ void make_log(void)
 }
 
 //--------------------------------------------------------------------
-//  •W€o—Í‚Æƒtƒ@ƒCƒ‹o—Í
+//  æ¨™æº–å‡ºåŠ›ã¨ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›
 //--------------------------------------------------------------------
 
-//----  •W€o—Í{ƒtƒ@ƒCƒ‹o—Í
-void my_printf(FILE *fp, char st[]) 
+//----  æ¨™æº–å‡ºåŠ›ï¼‹ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›
+void my_printf(FILE *fp, char st[])
 {
   printf(st);
   fprintf(fp, st);
 }
 
-//----  •W€o—Í{ƒtƒ@ƒCƒ‹o—Í(charŒ^‚Ì”z—ñ)
-void my_printf_c(FILE *fp, char st[], char x[]) 
+//----  æ¨™æº–å‡ºåŠ›ï¼‹ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›(charå‹ã®é…åˆ—)
+void my_printf_c(FILE *fp, char st[], char x[])
 {
   printf(st, x);
   fprintf(fp, st, x);
 }
 
-//----  •W€o—Í{ƒtƒ@ƒCƒ‹o—Í(intŒ^)
-void my_printf_i(FILE *fp, char st[], int x) 
+//----  æ¨™æº–å‡ºåŠ›ï¼‹ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›(intå‹)
+void my_printf_i(FILE *fp, char st[], int x)
 {
   printf(st, x);
   fprintf(fp, st, x);
 }
 
-//----  •W€o—Í{ƒtƒ@ƒCƒ‹o—Í(doubleŒ^)
-void my_printf_d(FILE *fp, char st[], double x) 
+//----  æ¨™æº–å‡ºåŠ›ï¼‹ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›(doubleå‹)
+void my_printf_d(FILE *fp, char st[], double x)
 {
   printf(st, x);
   fprintf(fp, st, x);
 }
-
