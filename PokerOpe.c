@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <stdbool.h>
 
 #include "Poker.h"
 
@@ -41,7 +42,8 @@
 //  関数宣言
 //--------------------------------------------------------------------
 
-
+void check_myhd(int hd[], int *num, int *suite);
+bool check_pair(int hd[], int *num); // ペアの存在
 
 //====================================================================
 //  戦略
@@ -65,13 +67,58 @@ us : 捨札数
 
 int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int us) {
   int myhd[HNUM];
+  int hdnum[13] = {0};  // 数位
+  int hdsuite[4] = {0}; // マーク
   arr_copy(myhd, hd, HNUM);
-  if ( tk < 2 ) { return -1; }
-  if ( poker_point(myhd) > P2 ) { return -1; }
-  return 0;
+  check_myhd(myhd, hdnum, hdsuite);
+  if ( check_pair(myhd, hdnum) ) {
+    return -1;
+  } else {
+    return 1;
+  }
+  //if ( tk < 2 ) { return -1; }
+  //if ( poker_point(myhd) > P2 ) { return -1; }
+  //return 0;
 }
 
 
 //====================================================================
 //  補助関数
 //====================================================================
+
+//--------------------------------------------------------------------
+// ペア存在チェック
+// 引数: 手札
+// 返却: 真偽値
+//--------------------------------------------------------------------
+
+void check_myhd(int hd[], int *num, int *suite) {
+  int k;
+  int num_index;
+  int suite_index;
+
+  for ( k = 0 ; k < HNUM; k++ ) {
+    num_index = hd[k] % 13;
+    suite_index = hd[k] % 4;
+    num[num_index]++;
+    suite[suite_index]++;
+  }
+}
+
+//--------------------------------------------------------------------
+// ペア存在チェック
+// 引数: 手札
+// 返却: 真偽値
+//--------------------------------------------------------------------
+
+bool check_pair(int hd[], int *num) {
+  int k;
+
+  for ( k = 0 ; k < 13; k++ ) {
+    if ( hd[k] > 1 ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
