@@ -3,6 +3,10 @@ tmp
 .DS_Store
 .settings
 Thumbs.db
+
+*.ini
+*.out
+
 # editors
 *~
 \#*\#
