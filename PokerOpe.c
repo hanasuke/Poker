@@ -72,7 +72,7 @@ int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int
   arr_copy(myhd, hd, HNUM);
   check_myhd(myhd, hdnum, hdsuite);
 
-  if ( poker_point(myhd) > P3 ) { return -1; }
+  if ( poker_point(myhd) > P7 ) { return -1; }
 
   return burn_index(myhd, fd, cg, tk, ud, us, hdnum, hdsuite);
 }
@@ -116,9 +116,8 @@ void check_myhd(int hd[], int *num, int *suite) {
 //--------------------------------------------------------------------
 
 int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[]) {
-  if ( tk > 4 ) {
-    if ( poker_point(hd) > P4 ) { return -1; }
-  } else if ( tk > 2 ){
+
+  if ( tk > 2 ){
     if ( poker_point(hd) > P3 ) { return -1; }
   } else {
     if ( poker_point(hd) > P2 ) { return -1; }
