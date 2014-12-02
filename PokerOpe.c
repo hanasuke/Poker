@@ -43,11 +43,8 @@
 //--------------------------------------------------------------------
 
 void check_myhd(int hd[], int *num, int *suite);
-bool check_straight(int *num);
-bool check_flush(int *suite);
-bool check_3cards(int num[]);
-bool check_pair(int hd[], int *num); // ペアの存在
 int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[]);
+
 //====================================================================
 //  戦略
 //====================================================================
@@ -75,27 +72,9 @@ int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int
   arr_copy(myhd, hd, HNUM);
   check_myhd(myhd, hdnum, hdsuite);
 
-  if ( check_straight(hdnum) ) {
-    return -1;
-  }
-
-  if ( check_flush(hdsuite) ) {
-    return -1;
-  }
-
-  if ( check_3cards(hdnum) ) {
-    return -1;
-  }
-
-  if ( check_pair(myhd, hdnum) ) {
-    return -1;
-  }
+  if ( poker_point(myhd) > P3 ) { return -1; }
 
   return burn_index(myhd, fd, cg, tk, ud, us, hdnum, hdsuite);
-
-  if ( tk < 2 ) { return -1; }
-  if ( poker_point(myhd) > P2 ) { return -1; }
-  return 0;
 }
 
 
@@ -123,82 +102,6 @@ void check_myhd(int hd[], int *num, int *suite) {
 }
 
 //--------------------------------------------------------------------
-// ストレート判定
-// 引数: 数位配列
-// 返却: 真偽値
-//--------------------------------------------------------------------
-
-bool check_straight(int *num) {
-  int k;
-  int length = 0;
-
-  for ( k = 0; k < 13; k++ ) {
-    if ( length == 5 ) {
-      return true;
-    }
-
-    if ( num[k] ) {
-      length++;
-    } else {
-      length = 0;
-    }
-  }
-  return false;
-}
-
-//--------------------------------------------------------------------
-// フラッシュ判定
-// 引数: 図種配列
-// 返却: 真偽値
-//--------------------------------------------------------------------
-
-bool check_flush(int *suite) {
-  int k;
-
-  for ( k = 0; k < 4; k++ ) {
-    if ( suite[k] == 5 ) {
-      return true;
-    }
-  }
-  return false;
-}
-
-//--------------------------------------------------------------------
-// 3カード判定
-// 引数: 手札、数位配列、図種配列
-// 返却: なし
-//--------------------------------------------------------------------
-
-bool check_3cards(int num[]) {
-  int k;
-
-  for ( k = 0; k < 4; k++ ) {
-    if ( num[k] >= 3 ) {
-      return true;
-    }
-  }
-  return false;
-}
-
-//--------------------------------------------------------------------
-// ペア存在チェック
-// 引数: 手札
-// 返却: 真偽値
-//--------------------------------------------------------------------
-
-bool check_pair(int hd[], int *num) {
-  int k;
-
-  for ( k = 0 ; k < 13; k++ ) {
-    if ( num[k] > 1 ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-}
-
-//--------------------------------------------------------------------
 // 捨て札決定
 // 引数: strategy()の引数+数位配列、図種配列
 // 返却: 捨て札のインデックス(0-4)
@@ -221,5 +124,5 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
     if ( poker_point(hd) > P2 ) { return -1; }
   }
 
-  return 2;
+  return rand()%5;
 }
