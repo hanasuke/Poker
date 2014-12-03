@@ -45,6 +45,8 @@
 void check_myhd(int hd[], int *num, int *suite);
 int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[]);
 
+int check_pair(int hd[], int fd[], int num[]);
+
 //====================================================================
 //  戦略
 //====================================================================
@@ -65,7 +67,8 @@ us : 捨札数
 
 --------------------------------------------------------------------*/
 
-int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int us) {
+int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int us)
+{
   int myhd[HNUM];
   int hdnum[13] = {0};  // 数位
   int hdsuite[4] = {0}; // マーク
@@ -83,6 +86,7 @@ int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int
     break;
   }
 
+
   return burn_index(myhd, fd, cg, tk, ud, us, hdnum, hdsuite);
 }
 
@@ -97,7 +101,8 @@ int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int
 // 返却: なし
 //--------------------------------------------------------------------
 
-void check_myhd(int hd[], int *num, int *suite) {
+void check_myhd(int hd[], int *num, int *suite)
+{
   int k;
   int num_index;
   int suite_index;
@@ -124,13 +129,41 @@ void check_myhd(int hd[], int *num, int *suite) {
 // us : 捨札数
 //--------------------------------------------------------------------
 
-int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[]) {
+int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[])
+{
 
   if ( tk > 2 ){
-    if ( poker_point(hd) > P3 ) { return -1; }
+    if ( poker_point(hd) > P4 ) { return -1; }
   } else {
-    if ( poker_point(hd) > P2 ) { return -1; }
+    if ( poker_point(hd) > P3 ) { return -1; }
   }
 
-  return rand()%5;
+  return check_pair(hd, fd, num);
+
+}
+
+//--------------------------------------------------------------------
+// ペアチェック
+// 引数: 手札配列、場札配列、数位配列
+// 返却: ペアでない最小の手札の配列添字
+//--------------------------------------------------------------------
+
+int check_pair(int hd[], int fd[], int num[])
+{
+  int k;
+  int hdnum;
+
+  // 既にペアがないか確認
+  for ( k = 0; k < 13; k++ ) {
+    if ( num[k] >= 2 ) {
+      return -1;
+    }
+  }
+
+  for ( k = 0; k < HNUM; k++ ) {
+    hdnum = hd[k]%13;
+    if ( num[hdnum] < 2 ) {
+      return k;
+    }
+  }
 }
