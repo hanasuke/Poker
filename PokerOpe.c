@@ -152,12 +152,16 @@ int check_pair(int hd[], int fd[], int num[])
 {
   int k;
   int hdnum;
+  int ct = 0;
 
   // 既にペアがないか確認
   for ( k = 0; k < 13; k++ ) {
     if ( num[k] >= 2 ) {
-      return -1;
+      ct++;
     }
+  }
+  if ( ct >= 2 ) {
+    return -1;
   }
 
   for ( k = 0; k < HNUM; k++ ) {
