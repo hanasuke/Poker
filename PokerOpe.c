@@ -74,6 +74,15 @@ int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int
 
   if ( poker_point(myhd) > P7 ) { return -1; }
 
+  switch (tk) {
+  case 1:
+  case 2:
+    if ( cg > 3 ) {
+      return -1;
+    }
+    break;
+  }
+
   return burn_index(myhd, fd, cg, tk, ud, us, hdnum, hdsuite);
 }
 
