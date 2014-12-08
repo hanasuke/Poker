@@ -44,10 +44,10 @@
 
 void check_myhd(int hd[], int *num, int *suite);
 int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[]);
-
 int check_flash(int hd[], int fd[], int suite[]);
 int check_pair(int hd[], int fd[], int num[]);
 int check_straight(int hd[], int fd[], int num[]);
+int check_straight_space(int hd[], int fd[], int num[]);
 int check_not_continue(int hd[], int num[]);
 int check_four(int hd[], int fd[], int num[]);
 
@@ -257,6 +257,36 @@ int check_straight(int hd[], int fd[], int num[])
     return check_not_continue(hd, num);
   }
   return -2;
+}
+
+//--------------------------------------------------------------------
+// ストレート真ん中空き状態
+// 引数: 手札配列、数位配列
+// 返却: 真ん中空きの部分の手札添字
+//--------------------------------------------------------------------
+
+int check_straight_space(int hd[], int fd[], int num[])
+{
+  int k;
+  int space = -2;
+  int length = 0;
+
+  for ( k = 0; k < 13; k++ ) {
+    if ( num[k] > 0 ) {
+      length++;
+    }
+    if ( ! num[k] ) {
+      if ( num[k+1] > 0 ) {
+        length++;
+        space = k;
+      }
+      if ( length == 5 ) {
+        if ( space != -2 ) {
+          return space;
+        }
+      }
+    }
+  }
 }
 
 //--------------------------------------------------------------------
