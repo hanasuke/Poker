@@ -153,9 +153,9 @@ int check_flash(int hd[], int fd[], int suite[]) {
 
   for ( k = 0; k < 4; k++ ) {
     // 既にフラッシュがある場合
-    if ( suite[k] == 4 ) {
+    if ( suite[k] == 5 ) {
       return -1;
-    } else if ( suite[k] == 3 ) {
+    } else if ( suite[k] == 4 ) {
       // フラッシュ-1がある場合
       hdsuite = k;
       for ( j = 0; j < HNUM; j++ ) {
