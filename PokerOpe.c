@@ -130,10 +130,7 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
   int index_pair;
   int index_four;
 
-  //if ( tk > 2 ){
-  //    if ( poker_point(hd) >= P4 ) { return -1; }
-    //} else {
-    if ( poker_point(hd) >= P5 ) { return -1; }
+  if ( poker_point(hd) >= P5 ) { return -1; }
 
   index_four = check_four(hd, fd, num);
   index_straight = check_straight(hd, fd, num);
