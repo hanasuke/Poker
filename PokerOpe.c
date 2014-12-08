@@ -48,6 +48,7 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
 int check_flash(int hd[], int fd[], int suite[]);
 int check_pair(int hd[], int fd[], int num[]);
 int check_straight(int hd[], int fd[], int num[]);
+int check_not_continue(int hd[], int num[]);
 
 //====================================================================
 //  戦略
@@ -134,6 +135,10 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
 
   straight = check_straight(hd, fd, num);
   flash = check_flash(hd, fd, suite);
+
+  if ( straight == flash ) {
+    //return straight;
+  }
 
   if ( straight == -1 ) {
     return -1;
@@ -224,24 +229,55 @@ int check_straight(int hd[], int fd[], int num[])
   int hdnum;
   int length = 0;
   int max_length = 0;
-  int ret;
+  int ret = 0;
 
   for ( k = 0; k < 13; k++ ) {
     if ( num[k] > 0 ) {
       length++;
     } else {
+      if ( length == 5 ) {
+        return -1;
+      }
       if ( length > max_length ) {
         max_length = length;
-        ret = k;
+        length = 0;
       }
     }
   }
-  if ( length == 5 ) {
-    return -1;
+  if ( max_length == 4 ) {
+    return check_not_continue(hd, num);
   }
-  if ( length == 4 ) {
-    return k;
-  }
+  return -2;
+}
 
+//--------------------------------------------------------------------
+// 連番の仲間はずれを探すやつ
+// 引数: 手札配列、数位配列
+// 返却: 連番になってない手札の添字
+//--------------------------------------------------------------------
+
+int check_not_continue(int hd[], int num[])
+{
+  int i;
+  int hdnum;
+
+  for ( i = 0; i < HNUM; i++ ) {
+    hdnum = hd[i];
+    if ( num[hdnum] > 1 ) {
+      return i;
+    }
+    if ( ! hdnum ) {
+      if ( ! num[hdnum+1] ) {
+        return i;
+      }
+    } else if ( hdnum == 12 ) {
+      if ( ! num[hdnum-1] ) {
+        return i;
+      }
+    }
+    if ( ! num[hdnum-1] && ! num[hdnum+1]) {
+      return i;
+    }
+  }
   return -2;
 }
