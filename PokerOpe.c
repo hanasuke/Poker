@@ -138,13 +138,12 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
   index_flash = check_flash(hd, fd, suite);
   index_pair = check_pair(hd, fd, num);
 
-
   if ( index_straight == index_flash && index_straight >= -1 ) {
     // ストレートフラッシュの可能性
     return index_flash;
   } else if ( index_straight >= 0 && index_flash >= 0 ) {
-    // とりあえずフラッシュ狙い
-    return index_flash;
+    // とりあえずストレート狙い
+    return index_straight;
   }
 
   if ( index_straight == -1 ) {
