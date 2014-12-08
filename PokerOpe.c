@@ -47,6 +47,7 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
 
 int check_flash(int hd[], int fd[], int suite[]);
 int check_pair(int hd[], int fd[], int num[]);
+int check_straight(int hd[], int fd[], int num[]);
 
 //====================================================================
 //  戦略
@@ -123,13 +124,23 @@ void check_myhd(int hd[], int *num, int *suite)
 int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[])
 {
   int flash;
+  int straight;
 
   if ( tk > 2 ){
     if ( poker_point(hd) >= P4 ) { return -1; }
   } else {
     if ( poker_point(hd) >= P5 ) { return -1; }
   }
+
+  straight = check_straight(hd, fd, num);
   flash = check_flash(hd, fd, suite);
+
+  if ( straight == -1 ) {
+    return -1;
+  } else if ( straight >= 0 ) {
+    return straight;
+  }
+
   // フラッシュ成立
   if ( flash == -1 ) {
     return -1;
@@ -200,4 +211,38 @@ int check_pair(int hd[], int fd[], int num[])
       return k;
     }
   }
+}
+
+//--------------------------------------------------------------------
+// ストレートチェック
+// 引数: 手札配列、場札配列、数位配列
+// 返却: ふっとんだ変な手札の数位札の配列添字
+//--------------------------------------------------------------------
+
+int check_straight(int hd[], int fd[], int num[])
+{
+  int k;
+  int hdnum;
+  int length = 0;
+  int max_length = 0;
+  int ret;
+
+  for ( k = 0; k < 13; k++ ) {
+    if ( num[k] > 0 ) {
+      length++;
+    } else {
+      if ( length > max_length ) {
+        max_length = length;
+        ret = k;
+      }
+    }
+  }
+  if ( length == 5 ) {
+    return -1;
+  }
+  if ( length == 4 ) {
+    return k;
+  }
+
+  return -2;
 }
