@@ -124,8 +124,9 @@ void check_myhd(int hd[], int *num, int *suite)
 
 int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[])
 {
-  int flash;
-  int straight;
+  int index_flash;
+  int index_straight;
+  int index_pair;
 
   if ( tk > 2 ){
     if ( poker_point(hd) >= P4 ) { return -1; }
@@ -133,28 +134,32 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
     if ( poker_point(hd) >= P5 ) { return -1; }
   }
 
-  straight = check_straight(hd, fd, num);
-  flash = check_flash(hd, fd, suite);
+  index_straight = check_straight(hd, fd, num);
+  index_flash = check_flash(hd, fd, suite);
+  index_pair = check_pair(hd, fd, num);
 
-  if ( straight == flash ) {
-    return flash;
-  } else if ( straight >= 0 && flash >= 0 ) {
-    return flash;
+
+  if ( index_straight == index_flash && index_straight >= -1 ) {
+    // ストレートフラッシュの可能性
+    return index_flash;
+  } else if ( index_straight >= 0 && index_flash >= 0 ) {
+    // とりあえずフラッシュ狙い
+    return index_flash;
   }
 
-  if ( straight == -1 ) {
+  if ( index_straight == -1 ) {
     return -1;
-  } else if ( straight >= 0 ) {
-    return straight;
+  } else if ( index_straight >= 0 ) {
+    return index_straight;
   }
 
   // フラッシュ成立
-  if ( flash == -1 ) {
+  if ( index_flash == -1 ) {
     return -1;
-  } else if ( flash >= 0 ){
-    return flash;
+  } else if ( index_flash >= 0 ){
+    return index_flash;
   } else {
-    return check_pair(hd, fd, num);
+    return index_pair;
   }
 }
 
