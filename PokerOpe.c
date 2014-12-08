@@ -100,7 +100,7 @@ void check_myhd(int hd[], int *num, int *suite)
 
   for ( k = 0 ; k < HNUM; k++ ) {
     num_index = hd[k] % 13;
-    suite_index = hd[k] % 4;
+    suite_index = hd[k] / 13;
     num[num_index]++;
     suite[suite_index]++;
   }
@@ -133,8 +133,7 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
   // フラッシュ成立
   if ( flash == -1 ) {
     return -1;
-  } else if ( tk >= 3 && flash >= 0 && cg <= 2 ) {
-    // フラッシュ成立してない && テイク数が3以降 && チェンジ数が2以下
+  } else if ( flash >= 0 ){
     return flash;
   } else {
     return check_pair(hd, fd, num);
@@ -154,14 +153,14 @@ int check_flash(int hd[], int fd[], int suite[]) {
   int hdsuite;
 
   for ( k = 0; k < 4; k++ ) {
+    hdsuite = k;
     // 既にフラッシュがある場合
     if ( suite[k] == 5 ) {
       return -1;
-    } else if ( suite[k] == 4 ) {
-      // フラッシュ-1がある場合
-      hdsuite = k;
+    } else if ( suite[k] >= 3 ) {
+      // フラッシュ-2以上がある場合
       for ( j = 0; j < HNUM; j++ ) {
-        if ( hd[j]%4 != hdsuite ) {
+        if ( hd[j]/13 != hdsuite ) {
           return j;
         }
       }
@@ -190,7 +189,7 @@ int check_pair(int hd[], int fd[], int num[])
       ct++;
     }
   }
-  if ( ct >= 2 ) {
+  if ( ct == 2 ) {
     return -1;
   }
 
