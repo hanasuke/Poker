@@ -45,6 +45,7 @@
 void check_myhd(int hd[], int *num, int *suite);
 int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[]);
 
+int check_flash(int hd[], int fd[], int suite[]);
 int check_pair(int hd[], int fd[], int num[]);
 
 //====================================================================
@@ -76,16 +77,6 @@ int strategy(const int hd[], const int fd[], int cg, int tk, const int ud[], int
   check_myhd(myhd, hdnum, hdsuite);
 
   if ( poker_point(myhd) > P7 ) { return -1; }
-
-  switch (tk) {
-  case 1:
-  case 2:
-    if ( cg > 3 ) {
-      return -1;
-    }
-    break;
-  }
-
 
   return burn_index(myhd, fd, cg, tk, ud, us, hdnum, hdsuite);
 }
@@ -131,16 +122,63 @@ void check_myhd(int hd[], int *num, int *suite)
 
 int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[])
 {
+  int flash_index;
+  int pair_index;
 
   if ( tk > 2 ){
-    if ( poker_point(hd) > P4 ) { return -1; }
+    if ( poker_point(hd) >= P4 ) { return -1; }
   } else {
-    if ( poker_point(hd) > P3 ) { return -1; }
+    if ( poker_point(hd) >= P5 ) { return -1; }
   }
 
-  return check_pair(hd, fd, num);
+  flash_index = check_flash(hd, fd, suite);
+  pair_index  = check_pair(hd, fd, num);
+
+  if ( tk < 3 && cg > 3 ) {
+    return pair_index;
+  }
+
+  // フラッシュ成立
+  if ( flash_index == -1 ) {
+    return -1;
+  } if ( flash_index >= 0 ) {
+    // フラッシュ-1
+    return flash_index;
+  }
 
 }
+
+//--------------------------------------------------------------------
+// フラッシュチェック
+// 引数: 手札配列、場札配列、図種配列
+// 返却: 最も少ない図種の最小の手札の配列添字
+//--------------------------------------------------------------------
+
+int check_flash(int hd[], int fd[], int suite[]) {
+  int j;
+  int k;
+  int fgsuite[4] = {0};
+  int max;
+  int hdsuite;
+
+  for ( k = 0; k < 4; k++ ) {
+    // 既にフラッシュがある場合
+    if ( suite[k] == 5 ) {
+      return -1;
+    } else if ( suite[k] == 4 ) {
+      // フラッシュ-1がある場合
+      hdsuite = k;
+      for ( j = 0; j < HNUM; j++ ) {
+        if ( hd[j]%4 != hdsuite ) {
+          return j;
+        }
+      }
+    }
+  }
+
+  return -2;
+}
+
 
 //--------------------------------------------------------------------
 // ペアチェック
