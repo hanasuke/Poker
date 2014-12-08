@@ -125,9 +125,9 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
   int flash;
 
   if ( tk > 2 ){
-    if ( poker_point(hd) > P4 ) { return -1; }
+    if ( poker_point(hd) >= P4 ) { return -1; }
   } else {
-    if ( poker_point(hd) > P6 ) { return -1; }
+    if ( poker_point(hd) >= P5 ) { return -1; }
   }
   flash = check_flash(hd, fd, suite);
   if ( flash == -1 ) {
