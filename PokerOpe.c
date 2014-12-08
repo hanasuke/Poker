@@ -122,30 +122,23 @@ void check_myhd(int hd[], int *num, int *suite)
 
 int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[])
 {
-  int flash_index;
-  int pair_index;
+  int flash;
 
   if ( tk > 2 ){
     if ( poker_point(hd) >= P4 ) { return -1; }
   } else {
     if ( poker_point(hd) >= P5 ) { return -1; }
   }
-
-  flash_index = check_flash(hd, fd, suite);
-  pair_index  = check_pair(hd, fd, num);
-
-  if ( tk < 3 && cg > 3 ) {
-    return pair_index;
-  }
-
+  flash = check_flash(hd, fd, suite);
   // フラッシュ成立
-  if ( flash_index == -1 ) {
+  if ( flash == -1 ) {
     return -1;
-  } if ( flash_index >= 0 ) {
-    // フラッシュ-1
-    return flash_index;
+  } else if ( tk >= 3 && flash >= 0 && cg <= 2 ) {
+    // フラッシュ成立してない && テイク数が3以降 && チェンジ数が2以下
+    return flash;
+  } else {
+    return check_pair(hd, fd, num);
   }
-
 }
 
 //--------------------------------------------------------------------
@@ -157,7 +150,6 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
 int check_flash(int hd[], int fd[], int suite[]) {
   int j;
   int k;
-  int fgsuite[4] = {0};
   int max;
   int hdsuite;
 
