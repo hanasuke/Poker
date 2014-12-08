@@ -49,6 +49,7 @@ int check_flash(int hd[], int fd[], int suite[]);
 int check_pair(int hd[], int fd[], int num[]);
 int check_straight(int hd[], int fd[], int num[]);
 int check_not_continue(int hd[], int num[]);
+int check_four(int hd[], int fd[], int num[]);
 
 //====================================================================
 //  戦略
@@ -127,6 +128,7 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
   int index_flash;
   int index_straight;
   int index_pair;
+  int index_four;
 
   if ( tk > 2 ){
     if ( poker_point(hd) >= P4 ) { return -1; }
@@ -134,9 +136,14 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
     if ( poker_point(hd) >= P5 ) { return -1; }
   }
 
+  index_four = check_four(hd, fd, num);
   index_straight = check_straight(hd, fd, num);
   index_flash = check_flash(hd, fd, suite);
   index_pair = check_pair(hd, fd, num);
+
+  if ( index_four >= -1 ) {
+    return index_four;
+  }
 
   if ( index_straight == index_flash && index_straight >= -1 ) {
     // ストレートフラッシュの可能性
@@ -283,6 +290,34 @@ int check_not_continue(int hd[], int num[])
     }
     if ( ! num[hdnum-1] && ! num[hdnum+1]) {
       return i;
+    }
+  }
+  return -2;
+}
+
+//--------------------------------------------------------------------
+// フォーカードチェック
+// 引数: 手札配列、場札配列、数位配列
+// 返却: 邪魔な手札の添字
+//--------------------------------------------------------------------
+
+int check_four(int hd[], int fd[], int num[])
+{
+  int i, k;
+  int hdnum;
+
+
+  for ( i = 0; i < 13; i++ ) {
+    if ( num[i] == 4 ) {
+      return -1;
+    }
+    if ( num[i] == 3 ) {
+      for ( k = 0; k < HNUM; k++ ) {
+        hdnum = hd[k]%13;
+        if ( i != hdnum ) {
+          return k;
+        }
+      }
     }
   }
   return -2;
