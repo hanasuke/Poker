@@ -133,7 +133,7 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
   // フラッシュ成立
   if ( flash == -1 ) {
     return -1;
-  } else if ( tk > 2 && flash >= 0 && cg <= 2 ) {
+  } else if ( tk >= 3 && flash >= 0 && cg <= 2 ) {
     // フラッシュ成立してない && テイク数が3以降 && チェンジ数が2以下
     return flash;
   } else {
@@ -161,7 +161,7 @@ int check_flash(int hd[], int fd[], int suite[]) {
       // フラッシュ-1がある場合
       hdsuite = k;
       for ( j = 0; j < HNUM; j++ ) {
-        if ( hd[j]%13 != hdsuite ) {
+        if ( hd[j]%4 != hdsuite ) {
           return j;
         }
       }
