@@ -130,9 +130,11 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
     if ( poker_point(hd) >= P5 ) { return -1; }
   }
   flash = check_flash(hd, fd, suite);
+  // フラッシュ成立
   if ( flash == -1 ) {
     return -1;
   } else if ( tk > 2 && flash >= 0 && cg <= 2 ) {
+    // フラッシュ成立してない && テイク数が3以降 && チェンジ数が2以下
     return flash;
   } else {
     return check_pair(hd, fd, num);
