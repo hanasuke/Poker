@@ -50,6 +50,7 @@ int check_pair(int hd[], int fd[], int num[]);
 int check_straight(int hd[], int fd[], int num[]);
 int check_not_continue(int hd[], int num[]);
 int check_four(int hd[], int fd[], int num[]);
+int check_three(int hd[], int fd[], int num[]);
 
 //====================================================================
 //  戦略
@@ -129,9 +130,11 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
   int index_straight;
   int index_pair;
   int index_four;
+  int index_three;
 
   if ( poker_point(hd) >= P5 ) { return -1; }
 
+  index_three = check_three(hd, fd, num);
   index_four = check_four(hd, fd, num);
   index_straight = check_straight(hd, fd, num);
   index_flash = check_flash(hd, fd, suite);
@@ -160,6 +163,13 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
     return -1;
   } else if ( index_flash >= 0 ){
     return index_flash;
+  }
+
+  // スリーカインズ成立の可能性
+  if ( index_three == -1 ) {
+    return -1;
+  } else if ( index_three >= 0 ) {
+    return index_three;
   } else {
     return index_pair;
   }
@@ -317,6 +327,35 @@ int check_four(int hd[], int fd[], int num[])
         hdnum = hd[k]%13;
         if ( i != hdnum ) {
           return k;
+        }
+      }
+    }
+  }
+  return -2;
+}
+
+//--------------------------------------------------------------------
+// スリーカインズチェック
+// 引数: 手札配列、場札配列、数位配列
+// 返却: 邪魔な手札の添字
+//--------------------------------------------------------------------
+
+int check_three(int hd[], int fd[], int num[])
+{
+  int i, k;
+  int hdnum;
+
+  for ( i = 0; i < 13; i++ ) {
+    if ( num[i] == 3 ) {
+      return -1;
+    }
+    if ( num[i] == 2 ) {
+      for ( k = 0; k < HNUM; k++ ) {
+        hdnum = hd[k]%13;
+        if ( i != hdnum ) {
+          if ( num[i] < 2 ) {
+            return k;
+          }
         }
       }
     }
