@@ -47,6 +47,8 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
 
 int check_flash(int hd[], int fd[], int suite[]);
 int check_pair(int hd[], int fd[], int num[]);
+int check_straight(int hd[], int fd[], int num[]);
+int check_not_continue(int hd[], int num[]);
 
 //====================================================================
 //  戦略
@@ -122,21 +124,42 @@ void check_myhd(int hd[], int *num, int *suite)
 
 int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[], int suite[])
 {
-  int flash;
+  int index_flash;
+  int index_straight;
+  int index_pair;
 
   if ( tk > 2 ){
     if ( poker_point(hd) >= P4 ) { return -1; }
   } else {
     if ( poker_point(hd) >= P5 ) { return -1; }
   }
-  flash = check_flash(hd, fd, suite);
-  // フラッシュ成立
-  if ( flash == -1 ) {
+
+  index_straight = check_straight(hd, fd, num);
+  index_flash = check_flash(hd, fd, suite);
+  index_pair = check_pair(hd, fd, num);
+
+
+  if ( index_straight == index_flash && index_straight >= -1 ) {
+    // ストレートフラッシュの可能性
+    return index_flash;
+  } else if ( index_straight >= 0 && index_flash >= 0 ) {
+    // とりあえずフラッシュ狙い
+    return index_flash;
+  }
+
+  if ( index_straight == -1 ) {
     return -1;
-  } else if ( flash >= 0 ){
-    return flash;
+  } else if ( index_straight >= 0 ) {
+    return index_straight;
+  }
+
+  // フラッシュ成立
+  if ( index_flash == -1 ) {
+    return -1;
+  } else if ( index_flash >= 0 ){
+    return index_flash;
   } else {
-    return check_pair(hd, fd, num);
+    return index_pair;
   }
 }
 
@@ -199,4 +222,69 @@ int check_pair(int hd[], int fd[], int num[])
       return k;
     }
   }
+}
+
+//--------------------------------------------------------------------
+// ストレートチェック
+// 引数: 手札配列、場札配列、数位配列
+// 返却: ふっとんだ変な手札の数位札の配列添字
+//--------------------------------------------------------------------
+
+int check_straight(int hd[], int fd[], int num[])
+{
+  int k;
+  int hdnum;
+  int length = 0;
+  int max_length = 0;
+  int ret = 0;
+
+  for ( k = 0; k < 13; k++ ) {
+    if ( num[k] > 0 ) {
+      length++;
+    } else {
+      if ( length == 5 ) {
+        return -1;
+      }
+      if ( length > max_length ) {
+        max_length = length;
+        length = 0;
+      }
+    }
+  }
+  if ( max_length == 4 ) {
+    return check_not_continue(hd, num);
+  }
+  return -2;
+}
+
+//--------------------------------------------------------------------
+// 連番の仲間はずれを探すやつ
+// 引数: 手札配列、数位配列
+// 返却: 連番になってない手札の添字
+//--------------------------------------------------------------------
+
+int check_not_continue(int hd[], int num[])
+{
+  int i;
+  int hdnum;
+
+  for ( i = 0; i < HNUM; i++ ) {
+    hdnum = hd[i]%13;
+    if ( num[hdnum] > 1 ) {
+      return i;
+    }
+    if ( ! hdnum ) {
+      if ( ! num[hdnum+1] ) {
+        return i;
+      }
+    } else if ( hdnum == 12 ) {
+      if ( ! num[hdnum-1] ) {
+        return i;
+      }
+    }
+    if ( ! num[hdnum-1] && ! num[hdnum+1]) {
+      return i;
+    }
+  }
+  return -2;
 }
