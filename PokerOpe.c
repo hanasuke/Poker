@@ -137,7 +137,9 @@ int  burn_index(int hd[], int fd[], int cg, int tk, int ud[], int us, int num[],
   flash = check_flash(hd, fd, suite);
 
   if ( straight == flash ) {
-    //return straight;
+    return flash;
+  } else if ( straight >= 0 && flash >= 0 ) {
+    return flash;
   }
 
   if ( straight == -1 ) {
@@ -262,7 +264,7 @@ int check_not_continue(int hd[], int num[])
   int hdnum;
 
   for ( i = 0; i < HNUM; i++ ) {
-    hdnum = hd[i];
+    hdnum = hd[i]%13;
     if ( num[hdnum] > 1 ) {
       return i;
     }
