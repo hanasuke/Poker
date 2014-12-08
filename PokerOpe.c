@@ -215,7 +215,12 @@ int check_pair(int hd[], int fd[], int num[])
     }
   }
   if ( ct == 2 ) {
-    return -1;
+    for ( k = 0; k < HNUM; k++ ) {
+      hdnum = hd[k]%13;
+      if ( num[hdnum] < 2 ) {
+        return k;
+      }
+    }
   }
 
   for ( k = 0; k < HNUM; k++ ) {
